@@ -8,8 +8,7 @@
 ·删除子串：D str
 命令格式为一行，包含一个字符D和一个字符串，之间有一个空格隔开。
 功能：删除原字符串中的子串str，若有多个子串str，则删除第一次出现的，若找不到str则不做任何操作
-*/
-/*
+
 ·插入子串： I str1 str2
 命令格式为一行，包含一个字符I和2个字符串，每两项之间用一个空格隔开。
 功能：表示将子串str2插入到子串str1的前面。若原串中有多个str1，则插入在最后一个子串的前面，若找不到str则不做任何操作。
@@ -22,40 +21,41 @@
 
 #include<stdio.h>
 #include<string.h>
+#include <locale.h>
 int compare(char *STRING,char*str);
 char* delete(char *STRING,char*str);
-// char* insert(char *STRING,char*str1,char *str2);
-// char* rehave(char *STRING,char*str1,char *str2);
-
+char* insert(char *STRING,char*str1,char *str2);
+char* rehave(char *STRING,char*str1,char *str2);
 int main(){
-    char STRING[100];scanf("%s",STRING);
-    char how[200];scanf("%s",how);
-    char *str1;
-    char *str2;
-    char *c;
-    c = strtok(how," ");
-    str1=strtok(NULL," ");
-    str2=strtok(NULL," ");
-    char choice=c[0];
+    // setlocale(LC_ALL, "");
+    char STRING[200];fgets(STRING, sizeof(STRING), stdin);//scanf("%s",STRING);
+    // char enter;enter=getchar();
+    char choice;choice=getchar();
+    char str1[200];scanf("%s",str1);
+    // char choice=c[0];
     if(choice=='C'){
         printf("%d",compare(STRING,str1));
     }
     else if(choice=='D'){
         printf("%s",delete(STRING,str1));
     }
-    // else if(choice=='I'){
-    //     printf("%s",insert(STRING,str1,str2));
-    // }
-    // else if(choice=='R'){
-    //     printf("%s",rehave(STRING,str1,str2));
-    // }
+    else if(choice=='I'){
+        char str2[100];scanf("%s",str2);
+        int len_str2=strlen(str2);
+        printf("%s",insert(STRING,str1,str2));
+    }
+   else if(choice=='R'){
+        char str2[100];scanf("%s",str2);
+        printf("%s",rehave(STRING,str1,str2));
+   }
     return 0;
 }
 
 int compare(char *STRING,char*str){
-    int LEN=strlen(STRING),len_str=strlen(str);
+    int LEN=strlen(STRING);
+    int len_str=strlen(str);
     int count=0;
-    for(int i=0;i<LEN-len_str;i++){
+    for(int i=0;i<LEN-len_str+1;i++){
         int flag=0;
         for(int j=0;j<len_str;j++){
             if(STRING[i+j]==str[j]){
@@ -70,8 +70,9 @@ int compare(char *STRING,char*str){
     return count;
 }
 char*delete(char *STRING,char*str){
-    int LEN=strlen(STRING),len_str=strlen(str);
-    char *copy_STRING;
+    int LEN=strlen(STRING);
+    int len_str=strlen(str);
+    char copy_STRING[100];
     for(int i=0;i<LEN;i++)copy_STRING[i]=STRING[i];
     for(int i=0;i<LEN-len_str;i++){
         int flag=0;
@@ -85,7 +86,60 @@ char*delete(char *STRING,char*str){
             for(int j=0;j<LEN-len_str-i;j++){
                 STRING[i+j]=copy_STRING[i+len_str+j];
             }
+            STRING[LEN-len_str]='\0';
+            break;
+        }
+        
+    }
+    return STRING;
+}
+char* insert(char *STRING,char*str1,char *str2){
+    int LEN=strlen(STRING),len_str1=strlen(str1),len_str2=strlen(str2);
+    char copy_STRING[100];
+    for(int i=0;i<LEN;i++)copy_STRING[i]=STRING[i];
+    for(int i=LEN-1;i>0;i--){
+        int flag=0;
+        for(int j=0;j<len_str1;j++){
+            if(STRING[i-len_str1+1+j]==str1[j]){
+                flag++;
+            }
+            else break;
+        }
+        if(flag==len_str1){
+            for(int j=0;j<len_str2;j++){
+                STRING[i-len_str1+1+j]=str2[j];
+            }
+            for(int j=0;j<LEN-i+len_str1;j++){
+                STRING[i-len_str1+len_str2+j+1]=copy_STRING[i-len_str1+1+j];
+            }
+            break;
         }
     }
+    return STRING;
+}
+char *rehave(char *STRING,char*str1,char *str2){
+    int LEN=strlen(STRING),len_str1=strlen(str1),len_str2=strlen(str2);
+    char copy_STRING[100];
+    for(int i=0;i<LEN;i++)copy_STRING[i]=STRING[i];
+    int count=0;
+    for (int i = 0; i < LEN; i++){
+        int flag=0;
+        for(int j=0;j<len_str1;j++){
+            if(copy_STRING[i+j]==str1[j]){
+                flag++;
+            }
+            else break;
+        }
+        if(flag==len_str1){
+            for(int j=0;j<len_str2;j++){
+                STRING[i+j+count*(len_str2-len_str1)]=str2[j];
+            }
+            for(int j=0;j<LEN-i-len_str1;j++){
+                STRING[i+len_str2+j]=copy_STRING[i+len_str1+j];
+            }
+            count++;
+        }
+    }
+    STRING[LEN+count*(len_str2-len_str1)]='\0';
     return STRING;
 }
