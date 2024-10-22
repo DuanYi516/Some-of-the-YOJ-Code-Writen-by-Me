@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include <stdlib.h>
+int main{
     FILE *file = fopen("error_290_ck14.in", "r");
     if (file == NULL) {perror("无法打开文件");return 1;}
     
