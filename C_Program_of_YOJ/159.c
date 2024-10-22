@@ -21,39 +21,36 @@
 
 #include<stdio.h>
 #include<string.h>
-#include <locale.h>
-int compare(char *STRING,char*str);
-char* delete(char *STRING,char*str);
+int compare(char *STRING,char*str,int len_str);
+char* delete(char *STRING,char*str,int len_str);
 char* insert(char *STRING,char*str1,char *str2);
 char* rehave(char *STRING,char*str1,char *str2);
 int main(){
-    // setlocale(LC_ALL, "");
-    char STRING[200];fgets(STRING, sizeof(STRING), stdin);//scanf("%s",STRING);
-    // char enter;enter=getchar();
+    char STRING[200];fgets(STRING, sizeof(STRING), stdin);//gets(STRING);//
     char choice;choice=getchar();
     char str1[200];scanf("%s",str1);
-    // char choice=c[0];
+    
+    int len_str1=strlen(str1);
     if(choice=='C'){
-        printf("%d",compare(STRING,str1));
+        printf("%d",compare(STRING,str1,len_str1));
     }
     else if(choice=='D'){
-        printf("%s",delete(STRING,str1));
+        printf("%s",delete(STRING,str1,len_str1));
     }
     else if(choice=='I'){
-        char str2[100];scanf("%s",str2);
+        char str2[200];scanf("%s",str2);
         int len_str2=strlen(str2);
         printf("%s",insert(STRING,str1,str2));
     }
    else if(choice=='R'){
-        char str2[100];scanf("%s",str2);
+        char str2[200];scanf("%s",str2);
         printf("%s",rehave(STRING,str1,str2));
    }
     return 0;
 }
 
-int compare(char *STRING,char*str){
+int compare(char *STRING,char*str,int len_str){
     int LEN=strlen(STRING);
-    int len_str=strlen(str);
     int count=0;
     for(int i=0;i<LEN-len_str+1;i++){
         int flag=0;
@@ -69,10 +66,9 @@ int compare(char *STRING,char*str){
     }
     return count;
 }
-char*delete(char *STRING,char*str){
+char*delete(char *STRING,char*str,int len_str){
     int LEN=strlen(STRING);
-    int len_str=strlen(str);
-    char copy_STRING[100];
+    char copy_STRING[200];
     for(int i=0;i<LEN;i++)copy_STRING[i]=STRING[i];
     for(int i=0;i<LEN-len_str;i++){
         int flag=0;
@@ -95,7 +91,7 @@ char*delete(char *STRING,char*str){
 }
 char* insert(char *STRING,char*str1,char *str2){
     int LEN=strlen(STRING),len_str1=strlen(str1),len_str2=strlen(str2);
-    char copy_STRING[100];
+    char copy_STRING[200];
     for(int i=0;i<LEN;i++)copy_STRING[i]=STRING[i];
     for(int i=LEN-1;i>0;i--){
         int flag=0;
@@ -119,7 +115,7 @@ char* insert(char *STRING,char*str1,char *str2){
 }
 char *rehave(char *STRING,char*str1,char *str2){
     int LEN=strlen(STRING),len_str1=strlen(str1),len_str2=strlen(str2);
-    char copy_STRING[100];
+    char copy_STRING[200];
     for(int i=0;i<LEN;i++)copy_STRING[i]=STRING[i];
     int count=0;
     for (int i = 0; i < LEN; i++){
