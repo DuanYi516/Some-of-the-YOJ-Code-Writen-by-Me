@@ -8,13 +8,15 @@
 　　共2行，第1行是字符串S1，第2行是字符串S2。注意：
 输入数据保证每一个字符串不是另一个的前缀，且长度在100以内。*/
 #include<stdio.h>
+#include<string.h>
 int main(){
     char s1[100],s2[100];
-    for(int i=0;s1[i]!=" ";i++){
-        scanf("%c",&s1[i]);
-        if(s1[i]==' ')break;
+    gets(s1);gets(s2);
+    if(strcmp(s1,s2)==0){printf("0");}
+    else{
+        for(int i=0;i<strlen(s1);i++){
+            if(s1[i]!=s2[i]){printf("%d",s1[i]-s2[i]);break;}
         }
-    for(int i=0;s2[i]!="\n";i++)scanf("%c",&s2[i]);
-    if(s1==s2)printf("0");
+    }
     return 0;
 }
