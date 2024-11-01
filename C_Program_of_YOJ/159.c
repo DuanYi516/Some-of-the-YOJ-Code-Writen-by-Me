@@ -24,7 +24,7 @@
 int compare(char *STRING,char*str,int len_str);
 char* delete(char *STRING,char*str,int len_str);
 char* insert(char *STRING,char*str1,char *str2);
-char* rehave(char *STRING,char*str1,char *str2);
+char* replace(char *STRING,char*str1,char *str2);
 int main(){
     char STRING[200];fgets(STRING, sizeof(STRING), stdin);//gets(STRING);//
     char choice;choice=getchar();
@@ -44,7 +44,7 @@ int main(){
     }
    else if(choice=='R'){
         char str2[200];scanf("%s",str2);
-        printf("%s",rehave(STRING,str1,str2));
+        printf("%s",replace(STRING,str1,str2));
    }
     return 0;
 }
@@ -87,7 +87,8 @@ char*delete(char *STRING,char*str,int len_str){
         }
         
     }
-    return STRING;
+    if(strcmp(STRING,copy_STRING)==0)return "\0";
+    else return STRING;
 }
 char* insert(char *STRING,char*str1,char *str2){
     int LEN=strlen(STRING),len_str1=strlen(str1),len_str2=strlen(str2);
@@ -113,29 +114,58 @@ char* insert(char *STRING,char*str1,char *str2){
     }
     return STRING;
 }
-char *rehave(char *STRING,char*str1,char *str2){
-    int LEN=strlen(STRING),len_str1=strlen(str1),len_str2=strlen(str2);
+char *replace(char *STRING, char *str1, char *str2) {
+    int LEN = strlen(STRING), len_str1 = strlen(str1), len_str2 = strlen(str2);
     char copy_STRING[200];
-    for(int i=0;i<LEN;i++)copy_STRING[i]=STRING[i];
-    int count=0;
-    for (int i = 0; i < LEN; i++){
-        int flag=0;
-        for(int j=0;j<len_str1;j++){
-            if(copy_STRING[i+j]==str1[j]){
+    for (int i = 0; i < LEN; i++) copy_STRING[i] = STRING[i];
+    copy_STRING[LEN] = '\0'; // 确保字符串以空字符结尾
+
+    int count = 0;
+    for (int i = 0; i < LEN; i++) {
+        int flag = 0;
+        for (int j = 0; j < len_str1; j++) {
+            if (copy_STRING[i + j] == str1[j]) {
                 flag++;
-            }
-            else break;
+            } else break;
         }
-        if(flag==len_str1){
-            for(int j=0;j<len_str2;j++){
-                STRING[i+j+count*(len_str2-len_str1)]=str2[j];
+        if (flag == len_str1) {
+            for (int j = 0; j < len_str2; j++) {
+                STRING[i + j + count * (len_str2 - len_str1)] = str2[j];
             }
-            for(int j=0;j<LEN-i-len_str1;j++){
-                STRING[i+len_str2+j]=copy_STRING[i+len_str1+j];
+            for (int j = 0; j < LEN - i - len_str1; j++) {
+                STRING[i + len_str2 + j + count * (len_str2 - len_str1)] = copy_STRING[i + len_str1 + j];
             }
             count++;
+            i += len_str1 - 1; // 跳过已经替换的部分
         }
     }
-    STRING[LEN+count*(len_str2-len_str1)]='\0';
+    STRING[LEN + count * (len_str2 - len_str1)] = '\0';
     return STRING;
 }
+// char *replace(char *STRING,char*str1,char *str2){
+//     int LEN=strlen(STRING),len_str1=strlen(str1),len_str2=strlen(str2);
+//     char copy_STRING[200];
+//     for(int i=0;i<LEN;i++)copy_STRING[i]=STRING[i];
+//     int count=0;
+//     for (int i = 0; i < LEN; i++){
+//         int flag=0;
+//         for(int j=0;j<len_str1;j++){
+//             if(copy_STRING[i+j]==str1[j]){
+//                 flag++;
+//             }
+//             else break;
+//         }
+//         if(flag==len_str1){
+//             for(int j=0;j<len_str2;j++){
+//                 STRING[i+j+count*(len_str2-len_str1)]=str2[j];
+//             }
+//             for(int j=0;j<LEN-i-len_str1;j++){
+//                 STRING[i+len_str2+j]=copy_STRING[i+len_str1+j];
+//             }
+//             count++;
+//             puts(STRING);
+//         }
+//     }
+//     STRING[LEN+count*(len_str2-len_str1)]='\0';
+//     return STRING;
+// }

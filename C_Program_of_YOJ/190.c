@@ -5,7 +5,6 @@ struct letter_count{
     int lt;
     int ct;
 };
-int min_i(int s[],int n);
 void swap(struct letter_count my_ltct[250],int len_set,int his,int L);
 int main(){
     char s[250];get(s);
@@ -38,8 +37,6 @@ int main(){
     }
 }
 void swap(struct letter_count my_ltct[250],int len_set,int his,int L){
-    
-    //for(int i=0;i<len_set-1;i++){if(my_ltct[i].ct<=my_ltct[i+1].ct)flag+=1;} //判断是否全部升序
     if(his!=L-1){
         int id_min=0;
         for(int j=1;j<len_set;j++){
@@ -55,9 +52,4 @@ void swap(struct letter_count my_ltct[250],int len_set,int his,int L){
         my_ltct[id_min]=temp;  // 以上4行是在交换当前数组的首项与最小项
         swap(my_ltct+1,len_set-1,his+1,L);
     }
-}
-int min_i(int s[],int n){
-    int min_i=0;
-    for(int i=1;i<n;i++){if(s[i]>s[min_i]){min_i=i;}} //换成“s[i]<s[min_i]”就是从大到小
-    return min_i;
 }
