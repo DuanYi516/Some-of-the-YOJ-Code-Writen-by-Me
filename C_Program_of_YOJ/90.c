@@ -11,19 +11,16 @@ void swap(struct student s[], int n);
 int max_i(struct student s[], int n);
 
 int main() {
-    int n;
-    scanf("%d", &n); // n为要求题数
+    int n;scanf("%d", &n); // n为要求题数
+
     int *require = malloc(n * sizeof(int));
-    for (int i = 0; i < n; i++){
-        scanf("%d", &require[i]);
-        }
-    int m, k;
-    scanf("%d %d", &m, &k); // m为班级人数，k为前k名
+    for (int i = 0; i < n; i++){scanf("%d", &require[i]);}
+
+    int m, k;scanf("%d %d", &m, &k); // m为班级人数，k为前k名
     struct student class[100];
     for (int i = 0; i < m; i++) {
         scanf("%d", &class[i].id);
-        int p;
-        scanf("%d", &p); // p为该同学的题数
+        int p;scanf("%d", &p); // p为该同学的题数
         class[i].req_work_num = 0;
         for (int j = 0; j < p; j++) {
             scanf("%d", &class[i].work[j]);
@@ -44,9 +41,7 @@ int main() {
     }
     class[m - 1].rank = rank;
 
-    for (int i = 0; class[i].rank <= k; i++) {
-        printf("%d ", class[i].id);
-    }
+    for (int i = 0; class[i].rank <= k; i++) {printf("%d ", class[i].id);}
     return 0;
 }
 
