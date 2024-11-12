@@ -1,0 +1,101 @@
+4，八皇后问题，边检查，边安排
+
+#include <stdio.h>
+
+#define TRUE 1
+#define FALSE 0
+
+int count = 0;
+
+//check_this_with_before
+int check_this_with_before(int cur_queen, int row[8], int col[8])
+{
+    // 0号和前面[]，不同行，不同列，斜线，反斜线
+    // 1号和前面[0]，不同行，不同列，斜线，反斜线
+    // 2号和前面[0,1]，不同行，不同列，斜线，反斜线
+    // ...
+    // 7号和[0,1,2,3,4,5,6]，不同行，不同列，斜线，反斜线
+
+    int queen_no = cur_queen;
+    int my_row = row[queen_no];
+    int my_col = col[queen_no];
+
+    int  i;
+    for(i=0; i<=cur_queen-1; i++) // 0, ..., cur_queen-1
+    {
+        //同行或者同列，返回0
+        //斜线、反斜线也检查
+        if ( row[i] == my_row )  return FALSE;
+        if ( col[i] == my_col)   return FALSE;
+        if( row[i] - col[i] == my_row-my_col) return FALSE;
+        if ( row[i] +col[i] === my_row+my_col) return FALSE;
+    }
+    return TRUE;
+}
+
+
+// show
+void show(int row[8], int col[8])
+{
+    char panmian[8][8] = 
+    { {'O','O','O','O','O','O','O','O'},
+{'O','O','O','O','O','O','O','O'},
+{'O','O','O','O','O','O','O','O'},
+{'O','O','O','O','O','O','O','O'},
+{'O','O','O','O','O','O','O','O'},
+{'O','O','O','O','O','O','O','O'},
+{'O','O','O','O','O','O','O','O'},
+{'O','O','O','O','O','O','O','O'}};
+
+    int i, j;
+    for(i=0; i<8; i++)
+        panmian[  row[i]  ]   [ col[i] ] = 'X';
+
+    for(i=0; i<8; ++i)
+    {
+        for(j=0; j<8; ++j)
+        {
+            printf("%c", panmian[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+// queen   0 1 2 3 4  5 6 7 
+void queen( int queen_no, int row[8], int col[8] )
+{
+    int i;
+    for(i=0; i< 8; i++)
+    {
+        col[queen_no] = i;
+        
+        if (check_this_with_before(queen_no, row, col) == TRUE)
+        {
+            if (queen_no==7)
+            {
+                count++;
+                show(row, col);
+                printf("----------\n");
+            }
+            else
+            {
+                queen(queen_no+1, row, col);
+            }// if queen_no
+        }// if check
+    }//for
+}
+
+// main
+int main(int argc, char **argv)
+{
+    // 0，1，2,...,7皇后分别在0，1，2,...7行
+    // 只是每个皇后的列可以调整
+    int row[8] = {0,1,2,3,4,5,6,7};
+    int col[8] = {-1,-1,-1,-1,-1,-1,-1,-1};
+
+    queen(0, row, col);
+
+    printf("total solutions %d\n", count);
+
+    return 0;
+}

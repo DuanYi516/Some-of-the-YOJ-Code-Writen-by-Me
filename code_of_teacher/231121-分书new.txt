@@ -1,0 +1,103 @@
+#include <stdio.h>
+
+// like
+// 喜欢矩阵
+// 5个人（行）0，1，2，3，4
+// 5本书（列）0，1，2，3，4
+const int like[5][5] = { 
+	{ 0, 0, 1, 1, 0 },
+	{ 1, 1, 0, 0, 1 }, 
+	{ 0, 1, 1, 0, 1 }, 
+	{ 0, 0, 0, 1, 0 },
+	{ 0, 1, 0, 0, 1 } };
+
+// show
+void show(int solutions, int the_person[5], int the_book[5])
+{
+    printf("--------\n");
+    printf("solution no: %d\n", solutions);
+    int i;
+    for(i = 0; i < 5; i++)
+        printf("[%d: %d] ", the_person[i], the_book[i]);
+    printf("\n");
+}
+
+// five_person_no_conflict
+int five_person_no_conflict(int the_person[5], int the_book[5])
+{
+    // book数组
+    // 0 []
+    // 1 [0]
+    // 2 [0，1]
+    // 3 [0，1，2]
+    // 4 [0，1，2，3]
+    int i, j;
+    for(i = 0; i <= 4; i++)
+    {
+        int you_book = the_book[i];
+        for(j = 0; j <= i - 1; j++)
+        {
+            int my_book = the_book[j];
+            if(you_book == my_book)
+                return 0;
+        }
+    }
+
+    return 1;
+}
+
+// show_jubu
+void show_jubu( int cur_person, int the_person[5] , int the_book[5])
+{
+    printf("--------\n");
+    printf("jubu panmian\n");
+    int i;
+    for(i = 0; i <= cur_person; i++)
+        printf("[person %d: book %d] ", the_person[i], the_book[i]);
+    printf("\n");
+}
+
+int solutions = 0;
+
+// try_fenshu
+void try_fenshu(int cur_person, int the_person[5], int the_book[5])
+{
+    //  为cur_person分书
+    //  尝试 0、1、2、3、4这些书
+    //  如果能够安排（这个人喜欢这本书），就安排
+    //            已经安排到第四个（看看盘面是否有冲突，没有冲突就是一个方案）
+    //            还没有安排到第四个（安排下一个人）
+    //  *如果都不能够安排（这个人尝试完0-4），就退出本层递归调用，回溯上一个人（for下一本书）
+    int book;
+    for(book = 0; book < 5; book++)
+    {
+        if( like[cur_person][book] ==1)
+            {
+                the_book[cur_person] = book;
+                printf( "give book %d to person %d\n", book, cur_person);
+	show_jubu( cur_person, the_person, the_book);
+                if(cur_person == 4)
+                {
+                    if(five_person_no_conflict(the_person, the_book) == 1)
+                    {
+                        solutions++;
+                        show(solutions, the_person, the_book);
+                    }
+                }
+                else
+                    try_fenshu(cur_person + 1, the_person, the_book);
+            }
+    }
+}
+
+// main
+int main()
+{
+    int the_person[5] = { 0, 1, 2, 3, 4 };
+    int the_book[5] = { -1, -1, -1, -1, -1 };
+
+    int cur_person = 0;
+    try_fenshu(cur_person, the_person, the_book);
+
+    return 0;
+}

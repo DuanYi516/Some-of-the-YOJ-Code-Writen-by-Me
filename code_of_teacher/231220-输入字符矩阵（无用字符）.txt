@@ -1,0 +1,42 @@
+
+#include  <stdio.h>
+
+void show( int a[100][100], int n, int m)
+{
+    for(i=0; i<n; i++)
+    {
+    for(j=0; j<m; j++)
+    {
+        printf("%c", a[i][j]);
+    }
+    printf("\n");
+   }
+
+   printf("\n");
+}
+
+int main()
+{
+    char a[100][100];
+    int n, m;
+
+    scanf("%d%d", &n, &m);
+
+    int i,j;
+
+    char wuyong;
+    scanf("%c", & wuyong);
+
+    for(i=0; i<n; i++)
+    {
+    for(j=0; j<m; j++)
+    {
+        scanf("%c", & a[i][j]);
+    }
+        scanf("%c", & wuyong);
+}
+
+    show( a, n, m);
+
+    return 0;
+}

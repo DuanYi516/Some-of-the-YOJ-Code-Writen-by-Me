@@ -1,0 +1,57 @@
+计数统计
+	动态增长的数组-用于登记
+
+程序逻辑
+
+
+int a[100];
+
+int n;
+scanf("%d", &n);// 输入一个n
+
+
+int i; 
+for(i=0; i<n; i++)
+     scanf("%d", &a[i]); //输入n个元素到数组a
+
+
+//开始进行计数统计
+// 对照表，value对应num
+int count=0;
+int value[100];
+int num[100]
+
+for(i=0; i<n; i++)
+{
+     int the_value = a[i];
+
+     int index = -1;
+     int found = 0;
+     int j;
+    // 先查找
+     for(j = 0; j< count; j++)
+      {
+         	 if ( the_value == value[j] )
+          	{	
+		 index = j; 
+		found=1; 
+		break;
+	}
+      }
+
+     //看找到，找不到
+      if ( found == 1)
+     { 
+	 num[index] ++; 
+     }
+      else // found ==0
+      {
+	count++; 
+
+	value[count-1] = the_value; 
+	num[count-1]=1;
+       }
+
+}
+
+//完成计数统计后，可以输出每个值的个数

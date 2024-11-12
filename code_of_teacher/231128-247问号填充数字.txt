@@ -1,0 +1,79 @@
+247问号填充数字
+
+#include <stdio.h>
+#include <string.h>
+/*
+36?1?8
+236428
+#
+*/
+
+int count=0;
+
+void try_kuohao( int index, char str_me[200], char str_you[200])
+{
+        // i下标是数字
+	// 往下递归，i+1
+        // i下标不是数字
+        //     是\0
+       //       比较strme stryou，strme大的话，count++
+       //     是?
+	// 尝试把问号改为0-9，继续递归
+	// 注意回到本层递归的时候，把刚才改为0-9的问号恢复问好
+        
+ 
+
+    char c = str_me[index];
+
+    if ( c >= '0' && c<='9')
+    {
+        try_kuohao(index+1, str_me, str_you);
+    }
+    else if (c == '?')
+    {
+        char newc;
+        for (newc = '0'; newc<='9'; newc++)
+        {
+            str_me[index] = newc;
+            // show ste_me
+            //puts(str_me);
+            
+            try_kuohao(index+1, str_me, str_you);
+
+            str_me[index] = '?';
+            //puts(str_me);
+        }
+        
+    }
+    else if (c=='\0')
+    {
+        if ( strcmp(str_me, str_you) >0 )
+        count = count+1;
+    }
+}
+
+// main
+int main(int argc, char **argv)
+{   
+    char str_me[200];
+    char str_you[200];
+    
+    while(1)
+    {
+        scanf("%s", str_me);
+        if (strcmp( str_me,"#") == 0)
+            break;
+            
+        scanf("%s", str_you);
+        
+        //
+        int index = 0;
+        count = 0;
+        try_kuohao( index, str_me, str_you);
+        printf("%d\n", count);
+        
+    }
+    
+    
+	return 0;
+}

@@ -1,0 +1,75 @@
+5
+head 3
+I am
+Happy
+today.
+Are
+you?
+
+
+5
+tail 3
+I am
+Happy
+today.
+Are
+you?
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+/*
+ 5
+head 3
+I am
+Happy
+today.
+Are
+you?
+ */
+
+int main(int argc, char **argv)
+{
+ int n;
+ char head_or_tail[30];
+ int top_n;
+
+
+ scanf("%d", &n);
+ scanf("%s%d", head_or_tail, &top_n);
+
+    //
+ char*  name_list[100000];
+ int i;
+ for(i=0; i<n; i++)
+  name_list[i] = (char*)malloc(201);
+    //
+ char wuyong[32];//取得换行
+ gets(wuyong);//取得换行
+ 
+ for(i=0; i<n; i++)
+  gets(name_list[i]);
+
+    //
+ //for(i=0; i<n; i++)
+ // puts(name_list[i]);
+
+
+    if (strcmp( "head", head_or_tail) == 0)
+ {
+  for(i=0;i<top_n;i++)
+  {
+   puts(name_list[i]);
+  }
+  
+ }
+ else if (strcmp( "tail", head_or_tail) == 0)
+ {
+  //5里的3个
+  // 2 3 4
+  for(i=n-top_n;i<n; i++)
+   puts(name_list[i]);
+ }
+ 
+ return 0;
+}

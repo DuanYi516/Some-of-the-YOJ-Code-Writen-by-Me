@@ -1,0 +1,41 @@
+#include <stdio.h>
+
+int main()
+{
+    int n;
+    scanf("%d", &n);
+
+    int i;
+    int px[100000];
+    int py[100000];
+    for(i = 0; i < n; i++) {
+        scanf("%d%d", &px[i], &py[i]);
+    }
+
+    int x0[100000];
+    int x1[100000];
+    int y0[100000];
+    int y1[100000];
+    int q;
+    scanf("%d", &q);
+    for(i = 0; i < q; i++) {
+        scanf("%d%d%d%d", &x0[i], &x1[i], &y0[i], &y1[i]);
+    }
+
+    //
+    int count[100000];
+    for(i = 0; i < q; i++)
+        count[i] = 0;
+
+    int j;
+    for(i = 0; i < n; i++) {
+        for(j = 0; j < q; j++)
+            if(px[i] >= x0[j] && px[i] <= x1[j] && py[i] >= y0[j] && py[i] <= y1[j])
+                count[j] = count[j] + 1;
+    }
+
+    for(i = 0; i < q; i++)
+        printf("%d\n", count[i]);
+
+    return 0;
+}

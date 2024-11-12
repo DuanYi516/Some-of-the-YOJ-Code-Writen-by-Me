@@ -1,0 +1,51 @@
+#include <stdio.h>
+
+int main()
+{
+    int a, b, x, y, z;
+    scanf("%d%d%d%d%d", &a, &b,  &x, &y, &z);
+
+    int n;
+    int found_one_from_a2b =0;
+    
+    for (n=a; n<=b; n++)
+    {
+        // n
+        // 能够被x和y整除，且某一位上含有z的整数
+
+        if ( n %x !=0  || n%y!=0)
+            continue;
+
+        // 看某一位上是否有z
+        int baohan_z = 0;
+        int nn =n;
+        while(1)
+        {
+            int shang = nn/10;
+            int yu = nn%10;
+            
+            if (yu == z)
+            {
+                baohan_z =1;
+                break;
+            }
+
+            if (shang == 0) break;
+
+            nn = shang;
+        }// while
+        
+        if (baohan_z == 0)
+            continue;
+        else
+        {
+            found_one_from_a2b  =1;
+            printf("%d\n", n);
+        }
+    }// for n
+
+    if (found_one_from_a2b ==0)
+        printf("No\n");
+
+    return 0;
+}

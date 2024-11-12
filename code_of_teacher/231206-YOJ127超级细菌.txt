@@ -1,0 +1,212 @@
+#include <stdio.h>
+#include <string.h>
+
+/*
+f       fn                              sum_till_fn
+1       1                               1
+2       5 = 2*2+1                  6 = 1+5
+3       15 = 3*3+6              21 = 6+15
+4       37 = 4*4 +21            58 = 21+37
+.....
+ * n=1000 303cols
+ * n=10000 3012cols
+*/
+
+#define LEN 5000
+#define N 10000
+#define DEBUG_ALL 1
+
+// show
+void show( char fn[ LEN+1])
+{
+    // 下标0到LEN-1是正常字符，下标LEN为\0
+    int first_not_zero;
+    for( first_not_zero = 0; first_not_zero<=LEN-1; first_not_zero++ )
+        if ( fn[first_not_zero] != '0')
+            break;
+    printf("%s", fn+first_not_zero);
+}
+
+// show_number
+void show_number( int n, char fn[ LEN+1], char sum_till_fn[LEN+1] )
+{
+    if (DEBUG_ALL)
+    {
+        printf("%d: fn ", n);
+        show(fn );
+        printf("; sum_till_fn ");
+        show(sum_till_fn );
+        printf("\n", n);
+    }
+    else
+        printf("%d\n", n);
+
+}
+
+// make_num_str
+void make_num_str( int n_pingfang, char pingfang_str[LEN+1])
+{
+    int index = LEN-1;  // 下标0到LEN-1是正常字符，下标LEN为\0
+    int nn = n_pingfang;
+    while(1)
+    {
+        int yushu =  nn%10;
+        char cc = '0'+yushu -0;
+        pingfang_str[index] = cc;
+
+        index --;
+        nn = nn/10;
+        if (nn == 0)
+            break;
+    }// while
+    return;
+}
+
+// add_2_str
+void add_2_str( char str1[LEN+1],   //
+                char str2[LEN+1], char str3[LEN+1])
+{
+    int first_not_zero1;
+    for( first_not_zero1 = 0; first_not_zero1<=LEN-1; first_not_zero1++ )
+        if ( str1[first_not_zero1] != '0')
+            break;
+
+    int first_not_zero2;
+    for( first_not_zero2 = 0; first_not_zero2<=LEN-1; first_not_zero2++ )
+        if ( str2[first_not_zero2] != '0')
+            break;
+    int min_first_not_zero = first_not_zero1;
+    if (first_not_zero2<min_first_not_zero )
+        min_first_not_zero = first_not_zero2;
+
+    int index = LEN-1;  // 下标0到LEN-1是正常字符，下标LEN为\0
+    int jinwei = 0;
+    while(1)
+    {
+        char zifu1 = str1[index];
+        char zifu2 = str2[index];
+
+        int shuzi1 = zifu1 - '0';
+        int shuzi2 = zifu2 - '0';
+
+        int jiaqilai = shuzi1 + shuzi2  + jinwei;
+
+        //注意，加完了以后，可能有进位到下一步计算
+        if( jiaqilai >=10)
+        {
+            jinwei  = 1;
+            jiaqilai = jiaqilai -10;
+            str3[index] = '0' + jiaqilai;
+        }
+        else
+        {
+            jinwei = 0;
+            str3[index] = '0' + jiaqilai;
+        }
+
+        index --;
+        if (index <0)
+            break;
+        if (index < min_first_not_zero-1)
+            break;
+    }// while
+
+    return;
+}
+
+// init_all_zero
+ void init_all_zero( char fn[LEN+1])
+ {
+     int i;
+    for(i=0; i<=LEN-1; i++) // 0 - LEN-1是正常字符，LEN位置为\0
+        fn[i] = '0';
+    fn[LEN] = '\0';
+ }
+ 
+// fn_new
+void fn_new()
+{
+    int n=1;
+
+    char fn[ LEN+1]; // 0 - LEN-1是正常字符，LEN位置为\0
+    init_all_zero(fn);
+    fn[LEN-1] = '1';
+
+    char sum_till_fn[LEN+1];
+    init_all_zero(sum_till_fn);
+    sum_till_fn[LEN-1] = '1';
+
+    show_number(  n, fn, sum_till_fn);
+
+    char n_pingfang_str[LEN+1];
+    init_all_zero(n_pingfang_str);
+
+    char new_fn[LEN+1];
+    init_all_zero(new_fn);
+
+    char new_sum_till_fn[LEN+1];
+    init_all_zero(new_sum_till_fn);
+
+    while( n<=N-1)
+    {
+        n ++;
+        unsigned int n_pingfang = n*n;
+
+        make_num_str( n_pingfang, n_pingfang_str);
+
+        add_2_str( n_pingfang_str, sum_till_fn, new_fn);
+        add_2_str(sum_till_fn,  new_fn, new_sum_till_fn);
+
+        if ( n<= N-1)
+            if ( n%5000 ==0)
+                printf("processing %d\n", n );
+            else
+            {}
+        else
+            show_number(n, new_fn,new_sum_till_fn );
+
+        strcpy(fn, new_fn);
+        strcpy(sum_till_fn, new_sum_till_fn);
+    }// while
+    return;
+}
+
+// fn
+void fn()
+{
+    unsigned int n=1;
+
+    unsigned int fn = 1;
+    unsigned int sum_till_fn = 1;
+    printf("%d fn %d; sum_till_fn %d\n", n, fn, sum_till_fn );
+
+    while( n<=N-1)
+    {
+        n ++;
+        unsigned int n_pingfang = n*n;
+
+        unsigned int new_fn = n*n + sum_till_fn ;
+        unsigned   int new_sum_till_fn =  sum_till_fn+ new_fn;
+
+        if ( n<= N-1)
+            if ( n%5000 ==0)
+                printf("processing %d\n", n );
+            else
+            {}
+        else
+            printf("%d fn %d; sum_till_fn %d\n", n, new_fn, new_sum_till_fn );
+
+        fn = new_fn;
+        sum_till_fn  = new_sum_till_fn;
+    }
+    return;
+}
+
+// main
+int main()
+{
+    //fn();
+    fn_new();
+
+    return 0;
+}

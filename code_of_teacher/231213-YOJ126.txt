@@ -1,0 +1,113 @@
+#include <stdio.h>
+
+#define ZOU_GUO -200
+
+#define ZUO_ZOU 0
+#define YOU_ZOU 1
+#define XIA_ZOU 2
+
+int max_value = 0;
+
+// show
+void show( int panmian[8][8], int n, int m, int value_till_i_j)
+{
+	int i, j;
+
+	for(i = 0; i <= n - 1; i++)
+	{
+		for(j = 0; j <= m - 1; j++)
+		{
+			printf("%d ", panmian[i][j]);
+		}
+		printf("\n");
+	}
+	printf( "the value is %d\n", value_till_i_j);
+
+}
+
+// try_walk
+void try_walk(int i, int j, int n, int m, int value_till_now, int panmian[8][8])
+{
+	// 如果已经到达n-1 m-1
+	// ......和max_value比较看看，value_till_now更大的话，改动max_value
+	// 如果没有到达 n-1 m-1
+	// 	.....尝试左走、右走、下走
+	// 	.........如果能走：行坐标在范围之内，列坐标在范围之内，从没走过，
+	//  ................递归调用 newi, newj , n, m, value_till_now + ..., panmian
+	// ..........如果不能走，do nothing
+
+
+	if(i == n - 1 && j == m - 1)
+	{
+		if(value_till_now > max_value)
+			max_value = value_till_now;
+	}
+	else
+	{
+		int aa;
+		for(aa = ZUO_ZOU; aa <= XIA_ZOU; aa++)
+		{
+			int newi;
+			int newj;
+
+			if(aa == ZUO_ZOU)
+			{
+				newi = i;
+				newj = j - 1;
+			}
+			if(aa == YOU_ZOU)
+			{
+				newi = i;
+				newj = j + 1;
+			}
+			if(aa == XIA_ZOU)
+			{
+				newi = i + 1;
+				newj = j;
+			}
+
+			if(newi >= 0 && newi <= n - 1 && newj >= 0 && newj <= m - 1)
+				if (panmian[newi][newj] != ZOU_GUO)
+				{
+					int old_value = panmian[i][j];
+					panmian[i][j] = ZOU_GUO;
+
+					show( panmian, n,m,value_till_now);
+
+					printf("\n\nform %d,%d to %d,%d\n", i, j, newi, newj);
+
+					try_walk(newi, newj, n, m, value_till_now +panmian[newi][newj] , panmian);
+
+					panmian[i][j] =old_value;
+				}
+		}// for aa
+	}// else
+}
+
+// main
+int main()
+{
+	int n;
+	int m;
+	scanf("%d%d", &n, &m);
+
+	int i;
+	int j;
+	int panmian[8][8];
+	for(i = 0; i <= n - 1; i++)
+	{
+		for(j = 0; j <= m - 1; j++)
+		{
+			scanf("%d", &panmian[i][j]);
+		}
+	}
+
+	//  从0  0走到n-1  m-1，注意走过不能走，注意行列下标有效
+	// 可以左走、右走、下走
+	int value_till_now = panmian[0][0];
+	try_walk(0, 0, n, m, value_till_now, panmian);
+
+	printf("%d\n", max_value);
+
+	return 0;
+}
