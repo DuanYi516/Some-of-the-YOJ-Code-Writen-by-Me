@@ -17,7 +17,7 @@ int main(){
     for(int i=0;i<m;i++){scanf("%d",&vote[i]);}
     int result=-1;
 // 实现去重
-    int set[m];
+    int set[10000];
     int *s=Set(m,vote,set);
     int lenset;
     for(int i=0;i<m;i++){
@@ -50,8 +50,7 @@ int *Set(int len,int num[],int set[]){
 }
 int not_in(int num[],int I,int len,int set[],int lenset){
     int flag=0;
-    for(int i=0;i<lenset;i++){
-if(num[I]!=set[i])flag+=1;}
+    for(int i=0;i<lenset;i++){if(num[I]!=set[i])flag+=1;}
     if(flag==lenset)return 1;
     else return 0;
 }
