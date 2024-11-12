@@ -12,12 +12,11 @@ int main() {
         gets(one_voter);
         char *the_name = strtok(one_voter, " ");
         while (the_name != NULL) {
-            // printf("%s\n", the_name);
             int not_in = 1;
             for (int i = 0; i < num_candi; i++) {
                 if (strcmp(the_name, my_info[i].name) == 0) {
-                    my_info[i].score++;
                     not_in = 0;
+                    my_info[i].score++;                    
                 }
             }
             if (not_in) {
