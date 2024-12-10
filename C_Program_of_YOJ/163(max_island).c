@@ -3,7 +3,6 @@ struct type_info {
     int size;
     int locs[200];
 };
-
 void record_cross(int ground[100][100], int n, int m, int row, int col, char result[9]) {
     int count = 0;
     if(row - 1 >= 0 && ground[row - 1][col] =='I')result[count++] = 'w';
@@ -60,20 +59,6 @@ int main(){
     int n, m;
     scanf("%d %d", &n, &m);
     char rtn = getchar();
-
-    //     int n=10,m=10;
-    //     int ground[100][100]={
-    // {'I','I','I','I','I','I','I','.','.','.'},
-    // {'I','I','I','I','I','.','.','.','.','.'},
-    // {'I','I','I','.','.','.','.','.','.','.'},
-    // {'I','I','I','I','I','.','.','.','.','.'},
-    // {'I','.','.','.','.','.','.','.','.','.'},
-    // {'.','.','.','.','.','.','.','.','.','.'},
-    // {'.','.','.','.','.','.','.','.','.','.'},
-    // {'I','.','.','.','.','.','.','.','I','I'},
-    // {'I','.','I','I','.','.','.','.','I','.'},
-    // {'I','I','I','.','I','I','I','I','I','I'}};
-
     int ground[100][100];
     for (int row = 0; row < n; row++) {
         for (int col = 0; col < m; col++) {
@@ -98,7 +83,7 @@ int main(){
             MAX = my_info[il].size;
         }
     }
-    MAX=count==0?-1:MAX;
+    MAX=(count==0)?-1:MAX;
     printf("%d %d", count, 1 + MAX);
     return 0;
 }
