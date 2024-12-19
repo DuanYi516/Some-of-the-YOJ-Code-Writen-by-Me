@@ -33,8 +33,7 @@ void backtrack(int tree[100][100],int *path,int reslut,int floor,int N){
         printf("--%d\n",reslut);
         MAX=(reslut>MAX)?reslut:MAX;
         return;
-    }
-    
+    }  
     for(int loc=0;loc<2;loc++){
         reslut+=tree[f][path[f-1]+loc];
         path[f]=path[f-1]+loc;
