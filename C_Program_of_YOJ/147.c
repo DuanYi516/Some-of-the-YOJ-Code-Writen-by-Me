@@ -15,21 +15,18 @@ void print_alloc(int class, int final_alloc_info[4], int *p_count) {
             int flag = 0;
             for (int c = 0; c < class; c++) {
                 if (alloc_info[class].may_alloc[i] != final_alloc_info[c]) flag++;
-            }
-            if (flag == class) {
+            } // 检查是否已经排过课
+            if (flag == class) { // 若没有
                 final_alloc_info[class] = alloc_info[class].may_alloc[i];
                 class ++;
-                print_alloc(class, final_alloc_info, p_count);
+                print_alloc(class, final_alloc_info, p_count); // 递归
                 class --;
                 final_alloc_info[class] = 0;
             }
         }
     }
 }
-
 void find_alloc(int class_info[4]) {
-    int Na = class_info[0], Nb = class_info[1], Nc = class_info[2], Nd = class_info[3];
-
     for (int class = 0; class < 4; class ++) {
         int may_count = 0;
         for (int r = 0; r < 8; r++) {
