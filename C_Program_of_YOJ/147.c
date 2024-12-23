@@ -5,7 +5,7 @@ struct type_alloc_info {
 };
 int room[8] = {120, 40, 85, 50, 100, 140, 70, 100};
 static struct type_alloc_info alloc_info[4];
-void print_alloc(int class, int final_alloc_info[4], int *p_count) {
+void print_alloc(int class, int final_alloc_info[4], int* p_count) {
     if (class == 4) {
         printf("%d %d %d %d\n", final_alloc_info[0], final_alloc_info[1], final_alloc_info[2], final_alloc_info[3]);
         (*p_count)++;

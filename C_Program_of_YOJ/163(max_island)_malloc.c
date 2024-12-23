@@ -1,25 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct type_info {
-    int size;
-    int locs[200];
-};
-
 void record_cross(int **ground, int n, int m, int row, int col, char result[9]) {
     int count = 0;
     if (row - 1 >= 0 && ground[row - 1][col] == 'I') result[count++] = 'w';
-    if (row + 1 < n && ground[row + 1][col] == 'I') result[count++] = 'x';
+    if (row + 1 <  n && ground[row + 1][col] == 'I') result[count++] = 'x';
     if (col - 1 >= 0 && ground[row][col - 1] == 'I') result[count++] = 'a';
-    if (col + 1 < m && ground[row][col + 1] == 'I') result[count++] = 'd';
-    if (col + 1 < m && row + 1 < n && ground[row + 1][col + 1] == 'I') result[count++] = 'c';
-    if (col - 1 >= 0 && row + 1 < n && ground[row + 1][col - 1] == 'I') result[count++] = 'z';
-    if (col + 1 < m && row - 1 >= 0 && ground[row - 1][col + 1] == 'I') result[count++] = 'e';
+    if (col + 1 <  m && ground[row][col + 1] == 'I') result[count++] = 'd';
+    
+    if (col + 1 <  m && row + 1 <  n && ground[row + 1][col + 1] == 'I') result[count++] = 'c';
+    if (col - 1 >= 0 && row + 1 <  n && ground[row + 1][col - 1] == 'I') result[count++] = 'z';
+    if (col + 1 <  m && row - 1 >= 0 && ground[row - 1][col + 1] == 'I') result[count++] = 'e';
     if (col - 1 >= 0 && row - 1 >= 0 && ground[row - 1][col - 1] == 'I') result[count++] = 'q';
     result[count] = '\0';
 }
 
-void get_size(int **ground, int row, int col, int n, int m, struct type_info *my_info, int count) {
+void get_size(int **ground, int row, int col, int n, int m, int my_info[], int count) {
     char cross_result[9];
     record_cross(ground, n, m, row, col, cross_result);
     if (cross_result[0] == '\0') {
@@ -47,8 +43,7 @@ void get_size(int **ground, int row, int col, int n, int m, struct type_info *my
             }
             if (ground[new_row][new_col] == 'I') {
                 ground[new_row][new_col] = '.';
-                my_info[count].size++;
-                my_info[count].locs[my_info[count].size] = 100 * new_row + new_col;
+                my_info[count]++;
                 get_size(ground, new_row, new_col, n, m, my_info, count);
             }
         }
@@ -57,12 +52,10 @@ void get_size(int **ground, int row, int col, int n, int m, struct type_info *my
 
 int main() {
     int count = 0;
-    struct type_info my_info[50];
-    for (int i = 0; i < 50; i++) {
-        my_info[i].size = 0;
-    }
-    int n, m;
-    scanf("%d %d", &n, &m);
+        int* my_info = (int*)malloc(50 * sizeof(int));
+    if (my_info == NULL) return -1;// 处理内存分配失败的情况
+    for (int i = 0; i < 50; i++) my_info[i] = 0;
+    int n, m; scanf("%d %d", &n, &m);
     getchar(); // 读取并丢弃换行符
 
     int **ground = (int **)malloc(n * sizeof(int *));
@@ -89,7 +82,6 @@ int main() {
         for (int col = 0; col < m; col++) {
             char input = ground[row][col];
             if (input == 'I') {
-                my_info[count].locs[my_info[count].size] = 100 * row + col;
                 ground[row][col] = '.';
                 get_size(ground, row, col, n, m, my_info, count);
                 count++;
@@ -99,8 +91,8 @@ int main() {
 
     int MAX = 0;
     for (int il = 0; il < count; il++) {
-        if (my_info[il].size > MAX) {
-            MAX = my_info[il].size;
+        if (my_info[il] > MAX) {
+            MAX = my_info[il];
         }
     }
     MAX = count == 0 ? -1 : MAX;

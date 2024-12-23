@@ -1,8 +1,5 @@
 #include <stdio.h>
-struct type_info {
-    int size;
-    int locs[200];
-};
+
 void record_cross(int ground[100][100], int n, int m, int row, int col, char result[9]) {
     int count = 0;
     if(row - 1 >= 0 && ground[row - 1][col] =='I')result[count++] = 'w';
@@ -15,7 +12,7 @@ void record_cross(int ground[100][100], int n, int m, int row, int col, char res
     if(col - 1 >=0 && row - 1 >= 0 && ground[row-1][col - 1] =='I')result[count++] = 'q';
     result[count] = '\0';
 }
-void get_size(int ground[100][100], int row, int col, int n, int m, struct type_info *my_info, int count) {
+void get_size(int ground[100][100], int row, int col, int n, int m, int *my_info, int count) {
     char cross_result[9];
     record_cross(ground, n, m, row, col, cross_result);
     if (cross_result[0] == '\0') {
@@ -43,18 +40,16 @@ void get_size(int ground[100][100], int row, int col, int n, int m, struct type_
             }
             if (ground[new_row][new_col] == 'I') {
                 ground[new_row][new_col] = '.';
-                my_info[count].size++;
-                my_info[count].locs[my_info[count].size] = 100 * new_row + new_col;
-                get_size(ground, new_row, new_col, n, m, my_info, count);
+                my_info[count]++;get_size(ground, new_row, new_col, n, m, my_info, count);
             }
         }
     }
 }
 int main(){
     int count = 0;
-    struct type_info my_info[50];
+    int my_info[50];
     for (int i = 0; i < 50; i++) {
-        my_info[i].size = 0;
+        my_info[i] = 0;
     }
     int n, m;
     scanf("%d %d", &n, &m);
@@ -70,7 +65,6 @@ int main(){
         for (int col = 0; col < m; col++) {
             char input = ground[row][col];
             if (input == 'I') {
-                my_info[count].locs[my_info[count].size] = 100 * row + col;
                 ground[row][col] = '.';
                 get_size(ground, row, col, n, m, my_info, count);
                 count++;
@@ -79,8 +73,8 @@ int main(){
     }
     int MAX = 0;
     for (int il = 0; il < count; il++) {
-        if (my_info[il].size > MAX) {
-            MAX = my_info[il].size;
+        if (my_info[il] > MAX) {
+            MAX = my_info[il];
         }
     }
     MAX=(count==0)?-1:MAX;
