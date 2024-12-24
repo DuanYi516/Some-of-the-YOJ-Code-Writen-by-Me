@@ -1,0 +1,201 @@
+/*
+abcdefdefgh
+C def
+	2
+
+abcdefgh
+D def
+	abcgh
+
+abcdefgh
+I def bbb
+	abcbbbdefgh
+
+abcdefgh
+R def ha
+	abchagh
+*/
+#include <stdio.h>
+#include <string.h>
+
+// find_str1
+int find_str1( char long_str[200], char short_str[100],
+               int* p_found, int* p_index)
+{
+    // 找最后依次出现的位置
+
+    // 找到所有出现的情况
+    int count = 0;
+
+    // abcdefgh   	len8
+    // def		        len 3
+    int found = 0;
+    int found_index = -1;
+
+    if ( strlen(short_str) !=0 && strlen(long_str) !=0 &&
+            strlen(long_str) >=strlen(short_str))
+    {
+        int diff = strlen(long_str) -strlen(short_str);
+        int short_len = strlen(short_str);
+
+        int i = 0;
+
+        while(1)
+        {
+            if ( i> diff) break;
+
+            int j = 0;
+            int this_match = 1;
+            for(j=0; j<short_len; j++)
+            {
+                if (short_str[ j] != long_str[   i+j] )
+                {
+                    this_match=0;
+                    break;
+                }
+            }
+
+            if (this_match == 1)
+            {
+                found=1;
+                found_index=i;
+
+                count ++;
+
+                i = i+short_len ;//跳跃i+short_len，继续找
+            }
+            else
+            {
+                i = i+1;//从i+1继续找
+            }// else
+        }// while(1)
+    }// if长度不为0
+
+    *p_found = found ;
+    *p_index = found_index ;
+
+    return count;
+}
+
+// chuli
+void chuli()
+{
+    char old_str[210];
+    char mingling[8];
+    char str1[100];
+    char str2[100];
+
+    // input
+    scanf( "%s", old_str);
+    scanf( "%s", mingling);
+    if (mingling[0] == 'C' || mingling[0] == 'D')
+        scanf( "%s", str1);
+    else if  (mingling[0] == 'I' || mingling[0] == 'R')
+        scanf( "%s%s", str1, str2);
+
+    // find and count
+    int count = 0;
+    int found = 0;
+    int index = -1;
+    count  = find_str1( old_str, str1, & found, &index);
+
+    // 4 cases
+    char OP = mingling[0];
+
+    if (OP =='C')
+    {
+        //abcdefdefgh
+        //C def
+        //	2
+        printf("%d\n", count  );
+    }
+    else if( OP =='D')
+    {
+        //abcdefgh
+        //D def
+        //abcgh
+
+        if(found == 1)
+        {
+            int start = index;
+            int end = index +strlen(str1) -1;
+
+            // copy 前面部分，copy后面部分
+            char new_str[210];
+            int i;
+            for(i=0; i<= start-1; i++)
+                new_str[i]  = old_str[i];	// 拷贝abc
+            new_str[start] = '\0';		//abc后给\0
+
+            strcat( new_str, old_str + end +1);//gh粘贴到abc后
+
+            printf( "%s\n", new_str);
+        }
+        else
+            printf( "%s\n", old_str );
+    }
+    else if( OP =='I')
+    {
+        //abcdefgh
+        //I def bbb
+        //abcbbbdefgh
+        if(found == 1)
+        {
+            int start = index;
+            int end = index +strlen(str1) -1;
+
+            // copy 前面部分，copy str2, copy str1及其后面部分
+            char new_str[210];
+            int i;
+            for(i=0; i<= start-1; i++)
+                new_str[i]  = old_str[i];	// 拷贝abc
+            new_str[start] = '\0';		//abc后给\0
+
+            strcat( new_str, str2);
+            strcat( new_str, old_str+start);
+
+            printf( "%s\n", new_str);
+        }
+        else
+            printf( "%s\n", old_str );
+    }
+    else if( OP =='R')
+    {
+        //abcdefgh
+        //R def ha
+        //abchagh
+        if(found == 1)
+        {
+            int start = index;
+            int end = index +strlen(str1) -1;
+
+            // copy 前面部分，copy str2, copy 后面部分
+            char new_str[210];
+            int i;
+            for(i=0; i<= start-1; i++)
+                new_str[i]  = old_str[i];	// 拷贝abc
+            new_str[start] = '\0';		//abc后给\0
+
+            strcat( new_str, str2);
+            strcat( new_str, old_str+end+1);
+
+            printf( "%s\n", new_str );
+        }
+        else
+            printf( "%s\n", old_str );
+    }
+    else
+    {
+        // do nothing
+    }
+}
+
+// main
+int main()
+{
+    int round;
+    for(round=0; round<10; round++)
+        chuli();
+
+    return 0;
+}

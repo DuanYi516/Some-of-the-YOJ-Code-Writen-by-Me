@@ -1,0 +1,83 @@
+#include <stdio.h>
+
+// Zouji_Shijianduan_Count
+struct Zouji_Shijianduan_Count
+{
+	int zouji;
+	int shijianduan;
+	int count;
+};
+
+int main()
+{
+	// input
+	int n,k;
+	scanf("%d%d",&n, &k);
+
+	// init panmian
+	int panmian[8][8]; // 周0--7, 时间段0--7
+	int i;
+	int j;
+	for(i=0; i<=7; i++)
+		for(j=0; j<=7; j++)
+			panmian[i][j] = 0;
+
+	// input and set panmian
+	for ( i=0; i<n; i++)
+	{
+		int xuehao;
+		scanf("%d", &xuehao);// throw away
+
+		int p;
+		scanf("%d", &p);
+
+		for(j=0; j<p; j++)
+		{
+			int zouji;
+			int shijianduan;
+			scanf("%d.%d", &zouji, & shijianduan);
+
+			panmian[ zouji] [ shijianduan] ++;
+		}
+	}
+
+	// pre processing
+	Zouji_Shijianduan_Count zouji_shijianduan_count[49];
+	int index =0;
+
+	for(i=1; i<=7; i++)
+		for(j=1; j<=7; j++)
+		{
+			zouji_shijianduan_count[index].zouji = i;//zouji
+			zouji_shijianduan_count[index].shijianduan = j;//shijianduan
+
+			zouji_shijianduan_count[index].count = panmian[i][j];
+			
+			index ++;// 注意index要++
+		}
+
+	// sort
+	int range;
+	for (range=49; range>=2; range--)
+	{
+		for( i=0; i<=range-2; i++)
+		{
+			if ( (zouji_shijianduan_count[i].count> zouji_shijianduan_count[i+1].count) ||
+			        (zouji_shijianduan_count[i].count == zouji_shijianduan_count[i+1].count && zouji_shijianduan_count[i].zouji > zouji_shijianduan_count[i+1].zouji) ||
+			        (zouji_shijianduan_count[i].count == zouji_shijianduan_count[i+1].count && zouji_shijianduan_count[i].zouji == zouji_shijianduan_count[i+1].zouji
+			        && zouji_shijianduan_count[i].shijianduan > zouji_shijianduan_count[i+1].shijianduan) )
+			{
+				Zouji_Shijianduan_Count temp;
+				temp = zouji_shijianduan_count[i];
+				zouji_shijianduan_count[i] = zouji_shijianduan_count[i+1];
+				zouji_shijianduan_count[i+1] = temp;
+			}
+		}
+	}
+
+	// output
+	for(i=0; i<k; i++)
+		printf("%d.%d %d\n", zouji_shijianduan_count[i].zouji, zouji_shijianduan_count[i].shijianduan, zouji_shijianduan_count[i].count);
+
+	return 0;
+}

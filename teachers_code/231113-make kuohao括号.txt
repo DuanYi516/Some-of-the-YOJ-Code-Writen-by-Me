@@ -1,0 +1,44 @@
+#include <math.h>
+#include <stdio.h>
+#include <string.h>
+#include <string>
+
+// make_kuohao
+void make_kuohao( std::string cur_str)
+{
+    if (cur_str.length() == 6)
+        printf("%s\n", cur_str.c_str());
+    else
+    {
+        std::string str_temp1 = "()";
+        str_temp1 = str_temp1 + cur_str;
+
+        std::string str_temp2 = "(";
+        str_temp2 = str_temp2 + cur_str;
+        str_temp2 = str_temp2 + ")";
+
+        std::string str_temp3 = cur_str;
+        str_temp3 = str_temp3 + "()";
+
+        if(strcmp(str_temp1.c_str(), str_temp2.c_str() ) == 0)
+        {}
+        else
+            make_kuohao(str_temp2);
+
+        if(strcmp(str_temp1.c_str(), str_temp3.c_str() ) == 0)
+        {}
+        else
+            make_kuohao(str_temp3);
+
+        make_kuohao(str_temp1);
+
+    }// not length ==6
+}
+
+int main()
+{
+    std::string cur_str = "";
+    make_kuohao(cur_str);
+
+    return 0;
+}

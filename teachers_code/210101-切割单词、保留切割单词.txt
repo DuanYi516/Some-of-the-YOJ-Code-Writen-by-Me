@@ -1,0 +1,21 @@
+字符串切割单词后、找个地方保存
+ 
+
+ char str[200];
+ int word_start;
+ int word_end;
+ 
+ int word_count = 0;
+ char word_list[100][100];
+ 
+ // 每次拿到一个词，找地方保存去
+ int ww;
+ for(ww=word_start; ww<=word_end; ww++)
+ {
+     word_list[word_count][ww - word_start]=  str[ww];//345 -> 012
+ }
+ word_list[word_count] [ end-start+1] = '\0';
+ word_count++;
+
+ 这怎么理解，用小麻雀
+ 比如start =3, end=5，总共三个字符，占用012下标，应该把下标3置为\0

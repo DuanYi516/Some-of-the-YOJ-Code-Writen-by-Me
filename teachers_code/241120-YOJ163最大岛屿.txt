@@ -1,0 +1,173 @@
+/*
+4  4
+.II.
+....
+....
+.III
+*/
+
+/*
+10 12
+............
+.II.......I.
+.III.....I..
+.I......II..
+............
+.....IIII...
+......II....
+....IIII....
+.....III....
+............
+*/
+
+#include <stdio.h>
+
+int island_count = 0;
+int cur_size =0;
+int max_size = 0;
+
+#define DEBUG 1
+
+// show
+void show( int i, int j, int n, int m, //
+           char a[100][100], int b[100][100])
+{
+    printf("\ncurrent position  =[ %d, %d ]\n", i, j);
+
+    printf("\tisland_count  = %d\n", island_count );
+    printf("\tcur_size  = %d\n", cur_size );
+    printf("\tmax_size  = %d\n", max_size );
+
+    printf("\ta\t\tb\n");
+    int ii;
+    int jj;
+    for( ii=0; ii<n; ii++)
+    {
+        for(jj = 0; jj<m ; jj++)
+            printf( "%c   ", a[ii][jj]);
+
+        printf( "\t\t");
+
+        for(jj = 0; jj<m ; jj++)
+            if (b[ii][jj] == 0)
+                printf( "-   ");
+            else // b[ii][jj] == 1
+                printf( "*   ");
+
+
+        printf("\n");
+    }
+    printf("------------------------------");
+}
+
+// expand
+void expand(int  i, int j, int n, int m, //
+            char a[100][100], int b[100][100])
+{
+    if (DEBUG)
+        show( i, j, n, m, a, b);
+
+    //考察8个邻居
+    //左上        -1	-1
+    //上             -1 	0
+    //右上      	    -1 	+1
+    //左		        0   	-1
+    //右		        0   	+1
+    //左下		    +1 	 -1
+    //下		        +1 	 0
+    //右下		    +1  	+1
+    int  i_delta[8] = {-1, -1, -1, 0, 0, +1, +1, +1};
+    int j_delta[8] = {-1, 0, +1, -1, +1, -1, 0, +1};
+
+    int k;
+    for(k=0; k<8; k++)
+    {
+        int new_i = i+ i_delta[ k];
+        int new_j = j + j_delta[ k];
+
+        if (new_i >=0 && new_i <= n-1 &&
+                new_j >=0 && new_j <=m-1  )
+        {
+            if ( a[ new_i] [new_j] == 'I' && b[new_i] [new_j] == 0)
+            {
+                b[new_i] [new_j] =1;//表示遍历过
+                cur_size = cur_size +1;
+                expand( new_i, new_j, n, m, a, b); //查看其邻居
+            }
+        }
+    }// for
+}
+
+// main
+int main()
+{
+    int n, m;
+
+    char a[100][100];
+    int b[100][100];
+
+    // input
+    scanf("%d%d", &n, &m);
+    int i, j;
+
+    char wuyong;
+    scanf("%c", &wuyong);// 吃掉n m 后面的\n
+
+    for( i=0; i<n; i++)   //特别注意，读取一个个字符的时候，可能需要单独处理\n
+    {
+        for( j=0; j<m; j++)
+        {
+            char temp_c;
+            scanf("%c", &temp_c);
+            a[i] [j] = temp_c;
+        }
+        scanf("%c", &wuyong);// 吃掉每行末尾的\n
+    }
+
+    // initialize
+    for( i=0; i< 100; i++)
+        for( j=0; j< 100; j++)
+        {
+            b[i] [j] = 0;
+        }
+
+    // scannning a
+    for( i=0; i< n; i++)
+        for( j=0; j< m; j++)
+        {
+            char temp_c = a[i][j];
+
+            if ( temp_c  == '.' )
+            {}// do nothing
+            else
+            {
+                if ( b[i] [j] ==1) //遍历过
+                {}//do nothing
+                else
+                {
+                    island_count ++;
+
+                    cur_size =0;
+
+                    b[i][j] = 1; //表示遍历了
+                    cur_size = 1;
+                    expand( i, j, n, m, a, b);
+
+                    if (cur_size > max_size)
+                        max_size = cur_size;
+                    if (DEBUG)
+                    {
+                        printf("\nfinish check position  =[ %d, %d ]\n", i, j);
+
+                        printf("\tisland_count  = %d\n", island_count );
+                        printf("\tcur_size  = %d\n", cur_size );
+                        printf("\tmax_size  = %d\n", max_size );
+                    }// if (DEBUG)
+                } // else b[i][j] == 0
+            }// else I
+        }// for j
+
+    printf("%d %d\n", island_count, max_size);
+
+    return 0;
+}

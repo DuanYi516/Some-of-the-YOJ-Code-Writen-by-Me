@@ -1,0 +1,89 @@
+#include <stdio.h>
+
+int main()
+{
+	int n;
+	scanf("%d", &n);
+
+	int i;
+	int fenjie[100];
+	double bilv[100];
+	int jine;
+
+	for(i=0; i<n; i++)
+		scanf("%d%lf", &fenjie[i], &bilv[i]);
+
+	scanf("%d", & jine);
+
+	// case <0
+	if ( jine<0)
+	{
+		printf("NO\n");
+		return 0;
+	}
+
+	double jj;
+	if ( n==1)
+	{
+		jj = jine * bilv[0];
+		printf("%.2lf\n", jj);
+		return 0;
+	}
+
+	//  case 左边的左
+
+	if ( jine <= fenjie[0] )
+	{
+		jj = jine * bilv[0];
+		printf("%.2lf\n", jj);
+		return 0;
+	}
+
+// case右边之后
+	if ( jine > fenjie[ n-2])
+	{
+		jj = 0.0;
+		jj  = jj + fenjie[0] * bilv[0];
+		for( i=1; i<= n-2; i++)
+		{
+			jj  = jj +(fenjie[i] - fenjie[i-1]) * bilv[i];
+		}
+
+		jj = jj  +( jine- fenjie[n-2]) * bilv[n-1];
+
+		printf("%.2lf\n", jj);
+		return 0;
+	}
+
+	// case 落在中间
+	int dangwei ;
+	for( i=0; i<= n-1; i++)
+	{
+		if ( jine < fenjie[i])
+		{
+			dangwei = i-1;
+			break;
+		}
+	}
+
+	// 0下标档处理掉
+	// 1下标到dangwei下标，处理掉
+	// 在把jine比挡位下标多余的部分处理掉
+	if(1)
+	{
+		jj = 0.0;
+		jj  = jj + fenjie[0] * bilv[0];
+		for( i=1; i<=dangwei; i++)
+		{
+			jj  = jj +(fenjie[i] - fenjie[i-1]) * bilv[i];
+		}
+
+		jj = jj  +( jine- fenjie[dangwei]) * bilv[dangwei+1];
+		printf("%.2lf\n", jj);
+		return 0;
+
+	}
+
+	return 0;
+
+}

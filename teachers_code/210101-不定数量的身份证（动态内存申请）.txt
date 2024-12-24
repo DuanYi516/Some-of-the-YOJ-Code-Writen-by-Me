@@ -1,0 +1,43 @@
+内存的动态申请
+          管理若干身份证
+
+
+struct IDCard
+{
+     char id[20];
+     IDCard* next;
+};
+
+int main()
+{
+     IDCard* new_node = (IDCard*) malloc( sizeof( IDCard));
+     gets( new_node->id);
+    
+     IDCard* head = NULL;
+     while(1)
+     {
+            if ( strcmp( new_node->id, "-1")
+            {   free( new_node); break;}
+
+            if (head ==NULL)
+            {   head = new_node; new_node->next=NULL;}
+            else
+            {  IDCard* old_head = head;
+                new_node->next = old_head; 
+                head=new_node};
+
+           new_node = (IDCard*) malloc( sizeof( IDCard));
+           gets( new_node->id);
+      }
+
+      ................
+      
+      IDCard* p = head;
+      while(p!=NULL)
+     {
+           IDCard* temp = p;
+           p = p->next;
+ 
+            free( temp);
+      }
+}

@@ -1,0 +1,81 @@
+？如果要记录最大价值
+？如果要记录所经过的路径
+
+5 5
+1 1 1 0 1
+0 0 1 0 1
+1 1 1 1 1
+1 0 1 0 0
+1 0 1 1 1
+YES
+
+0、读n,m
+	读取a盘面，
+	初始化b盘面，没有走过mei_zouguo
+
+1、初始条件：
+	0行，0列， 00走过zouguo
+
+2、结束条件，    i行，j列
+	如果到达n-1, m-1，说明有一条路走通了
+	found =1
+	return
+
+3、anpai 往下安排，如何安排
+	处在某个位置，i行，j列, n, m, a, b
+
+	按照2所说的，检查是否已经到达终点， return 
+
+	if ( found == 1) return 
+
+                for  左、右、上、下方向的时候
+		newi, newj
+		那个地方坐标有效
+		参考b矩阵，那个地方没有走过 mei_zouguo
+			newi newj那个位置的b矩阵zouguo
+			     递归 anpai newi, newj
+			newi newj那个位置的b矩阵mei zouguo			
+				*******请你show一下盘面看看   i, j, found, a, b
+
+// --------------------------------------------------
+0、读n, m
+     读a矩阵
+     初始化b矩阵，mei zouguo 
+
+1、初始条件
+	0行，0列，a, b矩阵该位置zouguo，记录length = a[0][0]
+
+ 2、结束条件
+	如果 i行，j列，a, b, length
+	发现到达了n-1, m-1位置
+		length 跟max_length作比较
+
+3、anpai   i行，j列，a, b, length
+	calling show
+
+	按照2的要求，看看有没有到达目标
+
+	for 左、右、下尝试
+		newi, newj
+		坐标有效
+		而且没有走过
+			newi, newj在b上设定zouguo
+				delta = a[ newi][newj]
+                                      		anpai  newi, newj , a, b , length +delta 
+              			newi, newj在b上设定mei zouguo
+4、 show i, j, a,b, length
+		 
+                                                
+
+
+
+
+
+
+				
+
+
+
+
+
+

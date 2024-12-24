@@ -1,0 +1,60 @@
+#include <stdio.h>
+
+int main(int argc, char **argv)
+{
+ // 1
+ int m;
+ scanf("%d",&m);
+ 
+ int i;
+ int fenjie[100];double bilv[100];
+ for(i=0;i<m;i++)
+ {
+  scanf("%d%lf", &fenjie[i], &bilv[i]);
+ }
+ 
+ double jine;
+ scanf("%lf", &jine);
+ 
+ // 2
+ if (jine <0)
+ {
+  printf("NO");
+  return 0;
+ }
+ 
+ int dangwei=0;
+ for (i=0; i<m;i++)
+ {
+  if (jine < fenjie[i])
+  {
+   dangwei=i;
+   break;
+  }
+  if (fenjie[i] == -1)
+  {
+   dangwei=i;
+   fenjie[i] = jine;
+   break;
+  }
+ }
+ 
+ // 3
+ double sum = 0;
+ for(i=0;i<dangwei;i++)
+ {
+  if (i==0 )
+   sum = sum + (fenjie[i]-0)*bilv[i];
+  else 
+   sum = sum + (fenjie[i] - fenjie[i-1])*bilv[i];
+ }
+ 
+ if(dangwei==0)
+      sum = sum+(jine-0)*bilv[0];
+else
+     sum = sum+ (jine-fenjie[dangwei-1])*bilv[dangwei];
+ 
+ printf("%.2lf", sum);
+ 
+ return 0;
+}

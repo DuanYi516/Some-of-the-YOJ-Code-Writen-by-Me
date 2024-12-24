@@ -1,0 +1,71 @@
+#include <stdio.h>
+int max_value = 0;
+
+void go(int a[4][4],int cur_row, int cur_col, int cur_value)
+{
+	// for 0到1走法
+    // 尝试，0走上/1走右上
+	// 不能走，什么都不做
+	// 能走，走，计算new_row, new_col, new_value
+	//       如果那是0，3位置，判断new_value和max_value,适时修改max_value
+	//       如果那不是0,3位置，递归go( new_row, new_col, new_value
+	int zoufa;
+	for(zoufa=0; zoufa<2; zoufa++)
+	{
+		int new_row;
+		int new_col;
+		int new_value;
+		if (zoufa == 0)
+		{
+			new_row = cur_row-1;
+			new_col = cur_col;
+		}
+		else if( zoufa==1)
+		{
+			new_row = cur_row-1;
+			new_col = cur_col +1;
+		}
+		
+		if( new_row>=0 && new_row<=3 &&new_col>=0 && new_col<=3 &&
+		  a[new_row][new_col] >0)
+		  {
+			  // 能走
+			  new_value = cur_value +a[new_row][new_col];
+			  
+			  if( new_row == 0 && new_col == 3)
+			  {
+				  if (new_value>max_value)max_value = new_value;
+			  }
+			  else
+			  {
+				  go( a, new_row, new_col, new_value);
+			  }
+		  }
+		  else
+		  {
+			  // do nothing
+		  }
+		
+	}
+	
+}
+
+
+int main(int argc, char **argv)
+{
+	int a[4][4] = {
+		{0,0,0,1},
+		{0,0,2,3},
+		{0,4,6,5},
+		{2,8,5,7}
+	};
+	
+	int cur_row =3;
+	int cur_col = 1;
+	int cur_value = 8;
+	go(a, cur_row, cur_col, cur_value);
+	
+	printf("max value for %d %d is %d\n", cur_row, cur_col, max_value);
+	
+	return 0;
+}

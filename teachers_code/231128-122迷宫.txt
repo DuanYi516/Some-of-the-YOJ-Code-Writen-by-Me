@@ -1,0 +1,114 @@
+#include <stdio.h>
+
+#define UP 0
+#define RIGHT 1
+#define DOWN 2
+#define LEFT 3
+
+int found = 0;
+
+// show_panmian
+void show_panmian(int n, int m, int a[9][9])
+{
+    int i;
+    int j;
+    for(i=0; i<n; i++)
+    {
+        for( j=0; j<m; j++)
+            printf("%d", a[i][j]);
+
+        printf("\n");
+    }
+
+    printf("----------\n");
+}
+
+// try_walk
+void try_walk(int cur_row, int cur_col, int n, int m, int a[9][9])
+{
+    // 如果 cur_row==n-1 并且cur_col== m-1
+    //       设定 found =1，返回
+    //  否则尝试上，右，下，左方向
+    //       如果从下层回溯回来，已经有found == 1，不用尝试其他方向，直接返回
+    //       old_row , old_col ->new_row, new_col
+    //       如果new_row, new_col坐标有效、并且这个地方为1
+    //            当前位置old_row , old_col设置为走过0
+    //            走下去
+    //            回溯回来设置为1
+
+    if (cur_row == n-1 && cur_col == m-1)
+    {
+        found =1;
+        return;
+    }
+
+    int action;
+    for( action = UP; action <= LEFT; action ++)
+    {
+        if (found == 1) return;
+
+        int old_row = cur_row;
+        int old_col = cur_col;
+
+        int new_row;
+        int new_col;
+
+        if ( action == UP )
+        {
+            new_row= cur_row -1;
+            new_col = cur_col;
+        }
+        if ( action == RIGHT )
+        {
+            new_row= cur_row;
+            new_col = cur_col+1;
+        }
+        if ( action == DOWN )
+        {
+            new_row= cur_row+1;
+            new_col = cur_col;
+        }
+        if ( action == LEFT )
+        {
+            new_row= cur_row;
+            new_col = cur_col-1;
+        }
+
+        if ( new_row >=0 && new_row<=n-1 &&//
+                new_col >=0 && new_col <=m-1)
+        {
+            if (a[new_row][new_col] == 1)
+            {
+                a[old_row][old_col ]  = 2;//走过了，不能再走
+                show_panmian(n,m, a);
+
+                try_walk(new_row, new_col, n, m,a);
+
+                a[old_row][old_col ]  = 1;//回溯
+            }
+        }// if
+    }//for
+}
+
+int main()
+{
+    // input
+    int n,m;
+    scanf("%d%d", &n, &m);
+
+    int i,j;
+    int a[9][9];
+    for (i=0; i<n; i++)
+        for( j=0; j<m; j++)
+            scanf("%d", &a[i][j]);
+
+    //
+    try_walk(0,0,n,m, a );
+
+    if (found==0)
+        printf("NO\n");
+    else
+        printf("YES\n");
+
+    return 0;
+}

@@ -1,0 +1,369 @@
+#include <stdio.h>
+#include <string.h>
+
+//#291. 大整数加减
+
+//+
+//	++	小大 大小		+ (+)333 (+)99999	+ (+)99999 (+)333
+//	+-	小大 大小		+ (+)333 -99999		+ (+)99999 -333
+//	-+	小大 大小		+ -333 (+)99999		+ -99999 (+)333
+//	--	小大 大小		+ -333 -99999		+ -99999 -333
+
+//-
+//	++	小大 大小		- (+)333 (+)99999	- (+)99999 (+)333
+//	+-	小大 大小		- (+)333 -99999		- (+)99999 -333
+//	-+	小大 大小		- -333 (+)99999		- -99999 (+)333
+//	--	小大 大小		- -333 -99999		- -99999 -333
+
+#define N 2500
+
+//  add
+void add( char* shu1, char* shu2)// 大在前，小在后，调用函数  99999 333
+{
+	// 99999 00333
+
+	// add from right to left，notice JINWEI
+	int n = strlen( shu1);
+	int jinwei = 0;
+	char shu33[N];
+	shu33[n] = '\0';//特别注意用'\0'封死
+
+	int i;
+	for (i=n-1; i>=0; i--)
+	{
+		int shuzi1 = shu1[i] -'0';
+		int shuzi2 = shu2[i] - '0';
+		int sum = shuzi1 + shuzi2 + jinwei;
+
+		if (sum <10)
+		{
+			jinwei = 0;
+			shu33[i] = '0' + sum;
+		}
+		else
+		{
+			jinwei= 1;
+			sum = sum -10;
+			shu33[i] = '0' + sum;
+		}
+	}
+
+	if (jinwei == 1)
+		printf("1");
+	puts( shu33);
+}
+
+// sub
+void sub( char* shu1, char* shu2)// 大在前，小在后，调用函数  99999 333
+{
+	// 108 - 019  这里有借尽，即借完的情况
+
+	// sub from right to left，notice JIEWei
+	int n = strlen( shu1);
+	int jiewei = 0;
+	char shu33[N];
+	shu33[n] = '\0';//特别注意用'\0'封死
+
+	int i;
+	for( i=n-1; i>=0; i--)
+	{
+		int shuzi1 = shu1[i] -'0';
+		int shuzi2 = shu2[i] - '0';
+
+		if ( shuzi1  >= (shuzi2+jiewei) )
+		{
+			//无需继续借位
+			int sub = shuzi1 - (shuzi2+jiewei);
+			shu33[i] = '0' + sub;
+			jiewei =0;
+		}
+		else
+		{
+			// 需继续借位
+			int sub= 10 + shuzi1 - (shuzi2+jiewei);
+			shu33[i] = '0' + sub;
+			jiewei =1;//继续借位
+		}
+	}
+
+	// 019
+	// 000
+	i=0;
+	while(1)
+	{
+		if ( i>=n ) break;
+		if ( shu33[i] != '0' )
+			break;
+		i ++;
+	};
+
+	if ( i>=n)
+		printf("0\n");
+	else
+		puts( shu33+i);
+}
+
+// equal_length
+void equal_length(char* shu11, char* shu22)
+{
+	// equal length
+	if ( strlen(shu11) >= strlen(shu22) )   // 99999    333
+	{
+		int n= strlen( shu11) - strlen(shu22);
+		char shu_temp[N];
+
+		int i;
+		for( i=0; i<n; i++)
+			shu_temp[i] = '0';
+		strcpy( shu_temp + n, shu22);//00333
+
+		strcpy( shu22, shu_temp);//copy back
+	}
+	else// 333 99999
+	{
+		int n= strlen( shu22) - strlen(shu11);
+		char shu_temp[N];
+
+		int i;
+		for( i=0; i<n; i++)
+			shu_temp[i] = '0';
+		strcpy( shu_temp + n, shu11);//00333
+
+		strcpy( shu11, shu_temp);//copy back
+	}
+}
+
+// strip_sign
+void strip_sign( char* shu1, char* shu11)
+{
+	char shu1_first = shu1[0];
+
+	if ( shu1_first == '+' || shu1_first == '-' )
+		strcpy( shu11, shu1+1);
+	else
+		strcpy( shu11, shu1);
+}
+
+// main
+int main()
+{
+	// input
+	char caozuo[8];
+	char shu1[N];
+	char shu2[N];
+
+	gets( caozuo);
+	gets( shu1);
+	gets( shu2);
+
+	// 8 case of +
+	if ( caozuo[0] == '+')
+	{
+		char shu1_first = shu1[0];
+		char shu2_first = shu2[0];
+
+		// + (+)333 (+)99999
+		// + (+)99999 (+)333
+
+		if (( shu1_first == '+' || (shu1_first  >= '0' && shu1_first  <='9' ) )   &&
+		        ( shu2_first == '+' || (shu2_first  >= '0' && shu2_first  <='9') ) )
+		{
+			//剥离符号
+			//大在前，小在后，调用函数
+			char shu11[N];
+			char shu22[N];
+
+			strip_sign( shu1, shu11);
+			strip_sign( shu2, shu22);
+
+			equal_length( shu11, shu22);//equal_length
+
+			if ( strcmp( shu11, shu22) >= 0)
+				add( shu11, shu22);
+			else
+				add( shu22, shu11);
+		}
+
+		// + (+)333 -99999
+		// + (+)99999 -333
+		if (  ( shu1_first == '+' || (shu1_first  >= '0' && shu1_first  <='9' ))   &&
+		        ( shu2_first == '-'  ))
+		{
+			char shu11[N];
+			char shu22[N];
+
+			strip_sign( shu1, shu11);
+			strip_sign( shu2, shu22);
+
+			equal_length( shu11, shu22);//equal_length
+
+			if ( strcmp( shu22, shu11) >=0)
+			{
+				printf("-");
+				sub( shu22, shu11);
+			}
+			else
+			{
+				sub( shu11, shu22);
+			}
+		}
+
+		// + -333 (+)99999		+ -99999 (+)333
+		if (  ( shu1_first == '-' )   &&
+		        ( shu2_first == '+' || (shu2_first  >= '0' && shu2_first  <='9' ) ))
+		{
+			char shu11[N];
+			char shu22[N];
+
+			strip_sign( shu1, shu11);
+			strip_sign( shu2, shu22);
+
+			equal_length( shu11, shu22);//equal_length
+
+			if ( strcmp( shu22, shu11) >=0)
+			{
+				sub( shu22, shu11);
+			}
+			else
+			{
+				printf("-");
+				sub( shu11, shu22);
+			}
+		}
+
+		// + -333 -99999		+ -99999 -333
+		if (  ( shu1_first == '-' )   &&
+		        ( shu2_first == '-' ))
+		{
+			char shu11[N];
+			char shu22[N];
+
+			strip_sign( shu1, shu11);
+			strip_sign( shu2, shu22);
+
+			equal_length( shu11, shu22);//equal_length
+
+			if ( strcmp( shu22, shu11) >=0)
+			{
+				printf("-");
+				add( shu22, shu11);
+			}
+			else
+			{
+				printf("-");
+				add( shu11, shu22);
+			}
+		}
+	}// +
+
+	// ------------------------------------------------------------
+
+	// 8 case of -
+	if ( caozuo[0] == '-')
+	{
+		char shu1_first = shu1[0];
+		char shu2_first = shu2[0];
+
+		// - (+)333 (+)99999
+		// - (+)99999 (+)333
+
+		if (( shu1_first == '+' || (shu1_first  >= '0' && shu1_first  <='9' ) )   &&
+		        ( shu2_first == '+' || (shu2_first  >= '0' && shu2_first  <='9') ) )
+		{
+			//剥离符号
+			//大在前，小在后，调用函数
+			char shu11[N];
+			char shu22[N];
+
+			strip_sign( shu1, shu11);
+			strip_sign( shu2, shu22);
+
+			equal_length( shu11, shu22);//equal_length
+
+			if ( strcmp( shu11, shu22) >= 0)//- (+)99999 (+)333
+			{
+
+				sub( shu11, shu22);
+			}
+			else//- (+)333 (+)99999
+			{
+				printf("-");
+				sub( shu22, shu11);
+			}
+		}
+
+		// - (+)333 -99999
+		// - (+)99999 -333
+		if (  ( shu1_first == '+' || (shu1_first  >= '0' && shu1_first  <='9' ))   &&
+		        ( shu2_first == '-'  ))
+		{
+			char shu11[N];
+			char shu22[N];
+
+			strip_sign( shu1, shu11);
+			strip_sign( shu2, shu22);
+
+			equal_length( shu11, shu22);//equal_length
+
+			if ( strcmp( shu22, shu11) >=0)//- (+)333 -99999
+			{
+
+				add( shu22, shu11);
+			}
+			else// - (+)99999 -333
+			{
+				add( shu11, shu22);
+			}
+		}
+
+		// - -333 (+)99999		- -99999 (+)333
+		if (  ( shu1_first == '-' )   &&
+		        ( shu2_first == '+' || (shu2_first  >= '0' && shu2_first  <='9' ) ))
+		{
+			char shu11[N];
+			char shu22[N];
+
+			strip_sign( shu1, shu11);
+			strip_sign( shu2, shu22);
+
+			equal_length( shu11, shu22);//equal_length
+
+			if ( strcmp( shu22, shu11) >=0)//- -333 (+)99999
+			{
+				printf("-");
+				add( shu22, shu11);
+			}
+			else// - -99999 (+)333
+			{
+				printf("-");
+				add( shu11, shu22);
+			}
+		}
+
+		// - -333 -99999		- -99999 -333
+		if (  ( shu1_first == '-' )   &&
+		        ( shu2_first == '-' ))
+		{
+			char shu11[N];
+			char shu22[N];
+
+			strip_sign( shu1, shu11);
+			strip_sign( shu2, shu22);
+
+			equal_length( shu11, shu22);//equal_length
+
+			if ( strcmp( shu22, shu11) >=0)//- -333 -99999
+			{
+
+				sub( shu22, shu11);
+			}
+			else// - -99999 -333
+			{
+				printf("-");
+				sub( shu11, shu22);
+			}
+		}
+	}// -
+
+	return 0;
+}

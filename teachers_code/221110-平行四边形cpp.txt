@@ -1,0 +1,41 @@
+#include <stdio.h>
+
+int main(int argc, char **argv)
+{
+	int x0,y0;
+	int x1,y1;
+	int x2,y2;
+
+	scanf("%d%d", &x0, &y0);
+	scanf("%d%d", &x1, &y1);
+	scanf("%d%d", &x2, &y2);
+
+	printf("3\n");
+
+	// point0
+	int delta_x = x0-x2;
+	int delta_y = y0-y2;
+
+	int new_x = x1+delta_x;
+	int new_y = y1+delta_y;
+	printf("%d %d\n", new_x, new_y);
+
+	// point1
+	delta_x = x0-x1;
+	delta_y = y0-y1;
+	new_x = x2+delta_x;
+	new_y = y2+delta_y;
+	printf("%d %d\n", new_x, new_y);
+
+
+	// point2
+	delta_x = x1-x0;
+	delta_y = y1-y0;
+	new_x = x2+delta_x;
+	new_y = y2+delta_y;
+	printf("%d %d\n", new_x, new_y);
+
+
+
+	return 0;
+}

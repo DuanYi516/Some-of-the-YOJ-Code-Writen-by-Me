@@ -1,0 +1,103 @@
+6
+sun 	59 	61
+zhang 	60 	60
+li 	79 	81
+su 	80 	80
+qian 	91 	89
+zhao  	90 	90
+
+0. n<=20，姓名长度<=30
+1. 按照总分进行排序
+2. 如果总分一样
+    那么按照语文进行排序
+
+#include <stdio.h>
+#include <math.h>
+#include <string.h>
+
+#define SMALL 1e-3
+
+int main()
+{
+	// input
+	int n;
+	scanf("%d", &n);
+
+	char xingming[20][31];// 最多20人，姓名长度<=30
+	float yuwen[20];
+	float shuxue[20];
+	float zongfen[20];
+	int i;
+	for (i=0; i<n; i++)
+	{
+		scanf("%s%f%f", xingming[i], &yuwen[i], &shuxue[i]);
+		zongfen[i] = yuwen[i] + shuxue[i];
+	}
+
+	// sort
+	int range;
+	for(range=n; range>=2; range--)
+	{
+		for(i=0; i<= range-2; i++)
+		{
+			// 按照总分，从大到小排序
+			// 总分一样，则按照语文，从大到小排序
+			if ( fabs( zongfen[i] - zongfen[i+1]) <= SMALL) //两个总分相等
+			{
+				if ( fabs( yuwen[i] - yuwen[i+1]) <= SMALL) //两个语文相等
+				{}
+				else if (yuwen[i] >yuwen[i+1])
+				{}
+				else // yuwen[i] <yuwen[i+1]
+				{
+					char str[30];
+					strcpy( str, xingming[i]);
+					strcpy( xingming[i], xingming[i+1]);
+					strcpy( xingming[i+1], str);
+					
+					float temp;
+					temp = yuwen[i];
+					yuwen[i] = yuwen[i+1];
+					yuwen[i+1] = temp;
+					
+					temp = shuxue[i];
+					shuxue[i] = shuxue[i+1];
+					shuxue[i+1] = temp;
+					
+					temp = zongfen[i];
+					zongfen[i] = zongfen[i+1];
+					zongfen[i+1] = temp;
+				}
+			}
+			else if (zongfen[i] > zongfen[i+1])
+			{}
+			else // zongfen[i] < zongfen[i+1]
+			{
+				char str[30];
+				strcpy( str, xingming[i]);
+				strcpy( xingming[i], xingming[i+1]);
+				strcpy( xingming[i+1], str);
+				
+				float temp;
+				temp = yuwen[i];
+				yuwen[i] = yuwen[i+1];
+				yuwen[i+1] = temp;
+				
+				temp = shuxue[i];
+				shuxue[i] = shuxue[i+1];
+				shuxue[i+1] = temp;
+				
+				temp = zongfen[i];
+				zongfen[i] = zongfen[i+1];
+				zongfen[i+1] = temp;
+
+			}  // if
+		}   // for i
+	}// for range
+
+	// output
+	for(i=0; i<n; i++)
+		printf("%s %.0f %.0f\n", xingming[i], yuwen[i], shuxue[i]);
+
+	return 0;
+}
